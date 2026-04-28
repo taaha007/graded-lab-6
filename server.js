@@ -25,7 +25,6 @@ http.createServer(function (req, res) {
       var pw = params.get('pw');
       var IDnumber = params.get('IDnumber');
 
-      // Validate name: must not be empty, must not be numbers only
       var nameValid = true;
       if (name === '') {
         nameValid = false;
@@ -33,8 +32,6 @@ http.createServer(function (req, res) {
       if (/^\d+$/.test(name)) {
         nameValid = false;
       }
-
-      // Validate password: at least 10 characters, must have letters and numbers
       var pwValid = true;
       if (pw.length < 10) {
         pwValid = false;
@@ -45,8 +42,6 @@ http.createServer(function (req, res) {
       if (!/[0-9]/.test(pw)) {
         pwValid = false;
       }
-
-      // Validate ID number: exactly 12 digits, dashes allowed between groups of 3, no dots, no other chars
       var idValid = true;
       if (/\./.test(IDnumber)) {
         idValid = false;
@@ -54,14 +49,10 @@ http.createServer(function (req, res) {
       if (!/^(\d{3}-\d{3}-\d{3}-\d{3}|\d{12})$/.test(IDnumber)) {
         idValid = false;
       }
-
-      // Replace password with stars
       var pwStars = pw.replace(/./g, '*');
 
-      // Remove dashes from ID number for display
       var cleanID = IDnumber.replace(/-/g, '');
 
-      // Determine result
       var allValid = nameValid && pwValid && idValid;
 
       var resultText = fs.readFileSync(path.join(__dirname, 'accessresults.txt'), 'utf8');
